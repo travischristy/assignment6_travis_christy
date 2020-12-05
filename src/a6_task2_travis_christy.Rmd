@@ -1,0 +1,96 @@
+---
+title: "a6_task2_travis_christy"
+author: "Travis Christy"
+date: "12/4/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(here)
+library(janitor)
+library(kableExtra)
+library(broom)
+```
+
+### Introduction:
+This report will examine the relationship between self-identification as an environmentalist and political alignment as either a conservative or liberal. The data was collected from an anonymous online survey in August of 2017 regarding influences on charitable giving for conservation (see citation). This report first organizes data into tables then uses the chi-squared test on the contingency table to test for variable independence.  
+
+  
+  
+**CITATION**: Andrews Forest LTER Site and C. Batavia. 2019. Influences on charitable giving for conservation: Online survey data of 1,331 respondents across the US, August 2017 ver 3. Environmental Data Initiative. [URL LINK](https://doi.org/10.6073/pasta/926e6270e324a1322a900da14d38b96c)  
+  
+  
+---    
+  
+  
+```{r}
+# reading in data and creating simplified version
+conservation_survey_simple <- read_csv(here("data", "conservation_survey.csv")) %>% 
+  clean_names() %>% 
+  select(env_id, pol_or)
+
+# organizing by political allignment into only two values representing conservative (pol_or = 1-3) or liberal (pol_or = 5-7)
+survey_binary_party <- conservation_survey_simple %>% 
+  filter(pol_or == c(1, 2, 3, 5, 6, 7)) %>% 
+  mutate(pol_align = case_when(pol_or <= 3 ~ "Conservative",
+                               pol_or >= 5 ~ "Liberal"))
+```
+
+#### Table 1. Survey responses to "ev_id" or "I consider myself an environmentalist".
+
+```{r}
+# creating table for answer to env_id question by political alignment
+q1_counts <- survey_binary_party %>% 
+  tabyl(pol_align, env_id) %>% 
+  rename("Political Alignment" = "pol_align", "Yes" = "1", "No" = "2", "Unsure" = "3")
+
+# create proportions table
+q1_proportions <- q1_counts %>% 
+  adorn_percentages() %>% 
+  adorn_pct_formatting(digits = 2) %>% 
+  adorn_ns()
+
+# display finalized table
+kbl(q1_proportions) %>% 
+    kable_material(full_width = F)
+```
+
+#### Chi-squared test for variable independence between self-identification as an environmentalist and political alignment.
+
+```{r}
+# convert data to contingency table
+q1_ct <- q1_counts %>% 
+  column_to_rownames(var = "Political Alignment")
+
+# run chi-square test
+q1_x2 <- chisq.test(q1_ct)
+
+# convert to tidy data for in line referencing
+q1_tidy <- tidy(q1_x2)
+```
+
+Political alignment and response to env_id ("I consider myself an environmentalist") are not independent (there is a significant association between political alignment and response to env_id of the survey). 
+
+$\chi$^2^(`r q1_tidy$parameter`) = `r round(q1_tidy$statistic,2)`, *p* = `r round(q1_tidy$p.value,3)`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
