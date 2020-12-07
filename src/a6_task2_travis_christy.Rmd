@@ -19,8 +19,6 @@ This report will examine the relationship between self-identification as an envi
 
   
   
-**CITATION**: Andrews Forest LTER Site and C. Batavia. 2019. Influences on charitable giving for conservation: Online survey data of 1,331 respondents across the US, August 2017 ver 3. Environmental Data Initiative. [URL LINK](https://doi.org/10.6073/pasta/926e6270e324a1322a900da14d38b96c)  
-  
   
 ---    
   
@@ -38,7 +36,7 @@ survey_binary_party <- conservation_survey_simple %>%
                                pol_or >= 5 ~ "Liberal"))
 ```
 
-#### Table 1. Survey responses to "ev_id" or "I consider myself an environmentalist".
+#### Table 1. Survey responses to env_id question aka "I consider myself an environmentalist".
 
 ```{r}
 # creating table for answer to env_id question by political alignment
@@ -71,9 +69,14 @@ q1_x2 <- chisq.test(q1_ct)
 q1_tidy <- tidy(q1_x2)
 ```
 
-Political alignment and response to env_id ("I consider myself an environmentalist") are not independent (there is a significant association between political alignment and response to env_id of the survey). 
+Political alignment and self-identification as an environmentalist are not independent (there is a significant association between political alignment and response to the env_id question of the survey). 
 
-$\chi$^2^(`r q1_tidy$parameter`) = `r round(q1_tidy$statistic,2)`, *p* = `r round(q1_tidy$p.value,3)`
+$\chi$^2^(`r q1_tidy$parameter`) = `r round(q1_tidy$statistic,2)`, *p* = `r round(q1_tidy$p.value,3)`  
+  
+  
+---
+  
+**CITATION**: Andrews Forest LTER Site and C. Batavia. 2019. Influences on charitable giving for conservation: Online survey data of 1,331 respondents across the US, August 2017 ver 3. Environmental Data Initiative. [URL LINK](https://doi.org/10.6073/pasta/926e6270e324a1322a900da14d38b96c)   
 
 
 

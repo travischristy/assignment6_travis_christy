@@ -1,0 +1,168 @@
+---
+title: "a6_task3_travis_christy"
+author: "Travis Christy"
+date: "12/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(here)
+library(janitor)
+library(kableExtra)
+library(broom)
+library(ggbeeswarm)
+library(effsize)
+library(ggpubr)
+```
+
+### Introduction:
+This report will compare total length of female Desert Grassland and Colorado Checkered lizards. The data used for comparisons was sampled from a report that used live traps near the San Andreas National Wildlife Refuge and White Sands National Park in New Mexico from 1989-2006. 
+
+This report first organizes and simplifies data for the two selected species then visualizes observations that report length measurements. Histograms and qqplots were used to check for normality across observations (not included in html report). Welch's two-sample t-test was then conducted to check for significant difference of mean lengths and Cohen's d test was used to report the effect size (not included in html report). 
+
+  
+  
+  
+---    
+  
+  
+
+
+#### Comparing length measurements (mm) of female Desert Grassland (CNUN) and female Colorado Checkered (CNTE) lizards.
+
+```{r}
+# reading in data and creating simplified version
+lizards_simple <- read_csv(here("data", "lizards.csv")) %>% 
+  clean_names() %>% 
+  select(spp, sex, total_length)
+
+# filtering to include only female lizards of species CNUN and CNTE
+lizards_f_cnun_cnte <- lizards_simple %>% 
+  filter(sex == "F", spp == c("CNUN", "CNTE"))
+
+# creating summary statistics
+lizards_summary <- lizards_f_cnun_cnte %>% 
+  group_by(spp) %>% # creates separate rows in data frame for each species
+  summarize(mean_length = mean(total_length, na.rm = TRUE), # disregarding weight values that are "NA"
+            median_length = median(total_length, na.rm = TRUE), # disregarding weight values that are "NA"
+            sd_length = sd(total_length, na.rm = TRUE), # disregarding weight values that are "NA"
+            sample_size = n())
+
+
+```
+
+```{r, fig.align='center', fig.cap= "**Figure 1.**: Female lizard lengths by species. Box endpoints indicate the 25^th^ and 75^th^ percentile values; the black line and black X within the box indicate the median and mean value for each species, respectively."}
+ggplot()+
+    geom_boxplot(data = lizards_f_cnun_cnte,  # plotting standard deviation and median
+                aes(x = spp, y = total_length)) +
+  geom_beeswarm(data = lizards_f_cnun_cnte, # beeswarm plot to show the observations for each species of lizard
+                aes(x = spp,
+                    y = total_length,
+                    color = spp,
+                    size = 1,
+                    alpha = .5),
+                show.legend = FALSE) +
+  labs(x = "Species", y = "Total Length (mm)") +
+  geom_point(data = lizards_summary, # plotting point for mean summary stat
+             aes(x = spp, y = mean_length), size=3, shape = 4)
+```
+  
+<center>  
+  
+**Table 1**: Summary Statistics (mean, median, standard deviation, and sample size) for female lizard legnths by species.  
+(Note: CNTE = Colorado Checkered Lizard, CNUN = Desert Grassland Lizard) 
+
+</center>  
+
+
+```{r}
+#Creating Table 1
+lizards_summary %>% 
+  kable(col.names = c("Species","Length (mm)", "Median Length (mm)", "Standard Deviation (mm)", "Sample Size")) %>% 
+  kable_material("hover", full_width = F)
+```
+
+
+
+
+
+
+```{r, include=FALSE}
+# Data Viz for distribution normality
+
+ggplot(data = lizards_f_cnun_cnte, aes(x = total_length)) + # histogram shows fairly normal distributions for both species -- CNUN are more leptokurtic suggesting less length dispersion 
+  geom_histogram(bins = 7) + # changed bin number for better visualization of distribution normality
+  labs(x = "Total Length (mm)",
+       y = "# of lizards (n)") +
+  facet_wrap(~spp)
+
+ggplot(data= lizards_f_cnun_cnte, aes(sample = total_length))+ #qq plots are mostly linear
+  geom_qq()+
+  facet_wrap(~spp)
+```
+```{r, include=FALSE}
+# Two-sample t-tests for male and female hare weights
+
+cnun_lengths <- lizards_f_cnun_cnte %>% # filter for cnun lizards and create vector for length
+  filter(spp == "CNUN", total_length > 0) %>% #removing NA observations
+  pull(total_length) 
+
+cnte_lengths <- lizards_f_cnun_cnte %>% # filter for cnun lizards and create vector for length
+  filter(spp == "CNTE", total_length > 0) %>% # removing NA observations
+  pull(total_length)
+
+lizards_ttest <- t.test(cnun_lengths, cnte_lengths) # run t-test
+lizards_ttest
+
+lizardseffsize <- cohen.d(cnun_lengths, cnte_lengths) # Cohen's D effect size
+lizardseffsize
+```
+
+On average, female Desert Grassland lizards (CNUN) length measurements are `r round((lizards_summary[2,2] / lizards_summary[1,2]) * 100)`% of female Colorado Checkered lizards (CNTE) lengths. The absolute difference in average means between female CNUN and CNTE lengths is `r round(lizards_summary[1,2]-lizards_summary[2,2])`mm. The difference in means is significant (Welch's two-sample t-test: t (`r round(lizards_ttest$parameter,2)`) = `r round(lizards_ttest$statistic, 2)`, p <0.01), and the effect size is large (Cohen's D = `r round(lizardseffsize$estimate, 2)`). These results are expected because they were identified as two distinct species.  
+
+  
+  
+---
+  
+**CITATION**: Lightfoot, D. 2017. Lizard pitfall trap data (LTER-II, LTER-III) ver 36. Environmental Data Initiative. [URL LINK](https://doi.org/10.6073/pasta/ff37b4cace16a9943575f3fd7067064e)   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
