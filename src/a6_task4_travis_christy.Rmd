@@ -89,7 +89,7 @@ fig1 <- fig1 %>%
   layout(
     title = "Mono Lake Levels 1850-2017 (CHRISTY 2020)",
     yaxis = list(
-      title = 'Water-level in feed above sea-level'),
+      title = 'Water-level (ft above sea-level)'),
     xaxis = list(
         title = 'Year',
         type = 'date',
