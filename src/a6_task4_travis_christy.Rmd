@@ -1,5 +1,5 @@
 ---
-title: "a6_task4_travis_christy"
+title: "Water Level Management at Mono Lake"
 author: "Travis Christy"
 date: "12/6/2020"
 output: html_document
@@ -98,7 +98,8 @@ fig1 <- fig1 %>%
 
 fig1
 ```
-**Figure 1:** The Mono Lake Management Level was created in 1994 due to the implications for nesting birds (eared grebes and California gulls) that rely on the safety of internal nesting islands for protection from predators and food. When the water level drops below 6377 ft above sea-level, predators can cross the newly formed land bridge and prey on the nesting birds and offspring. When the water levels drop below 6360 ft above sea-level, salinity levels begin to negatively affect biological food sources for the birds. The management level restricts LADW water extraction.
+**Figure 1** (This figure is interactive -- use cursor hover to see year-by-year water levels):  
+The Mono Lake Management Level was created in 1994 due to the implications for nesting birds (eared grebes and California gulls) that rely on the safety of internal nesting islands for protection from predators and food. When the water level drops below 6377 ft above sea-level, predators can cross the newly formed land bridge and prey on the nesting birds and offspring. When the water levels drop below 6360 ft above sea-level, salinity levels begin to negatively affect biological food sources for the birds. The management level restricts LADW water extraction.
   
 ---
   

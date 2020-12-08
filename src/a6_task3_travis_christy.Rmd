@@ -1,5 +1,5 @@
 ---
-title: "a6_task3_travis_christy"
+title: "Comparison of Female Lizard Lengths (Species: Desert Grassland vs Colorado Checkered)"
 author: "Travis Christy"
 date: "12/5/2020"
 output: html_document
@@ -21,15 +21,9 @@ library(ggpubr)
 This report will compare total length of female Desert Grassland and Colorado Checkered lizards. The data used for comparisons was sampled from a report that used live traps near the San Andreas National Wildlife Refuge and White Sands National Park in New Mexico from 1989-2006. 
 
 This report first organizes and simplifies data for the two selected species then visualizes observations that report length measurements. Histograms and qqplots were used to check for normality across observations (not included in html report). Welch's two-sample t-test was then conducted to check for significant difference of mean lengths and Cohen's d test was used to report the effect size (not included in html report). 
-
-  
-  
   
 ---    
   
-  
-
-
 #### Comparing length measurements (mm) of female Desert Grassland (CNUN) and female Colorado Checkered (CNTE) lizards.
 
 ```{r}
@@ -68,6 +62,9 @@ ggplot()+
   geom_point(data = lizards_summary, # plotting point for mean summary stat
              aes(x = spp, y = mean_length), size=3, shape = 4)
 ```
+  
+---
+  
   
 <center>  
   

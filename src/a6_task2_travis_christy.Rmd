@@ -1,5 +1,5 @@
 ---
-title: "a6_task2_travis_christy"
+title: "Relationship Between Political Alignment and Self-Identification as an Environmentalist"
 author: "Travis Christy"
 date: "12/4/2020"
 output: html_document
@@ -54,7 +54,9 @@ q1_proportions <- q1_counts %>%
 kbl(q1_proportions) %>% 
     kable_material(full_width = F)
 ```
-
+  
+--- 
+  
 #### Chi-squared test for variable independence between self-identification as an environmentalist and political alignment.
 
 ```{r}
@@ -69,10 +71,9 @@ q1_x2 <- chisq.test(q1_ct)
 q1_tidy <- tidy(q1_x2)
 ```
 
-Political alignment and self-identification as an environmentalist are not independent (there is a significant association between political alignment and response to the env_id question of the survey). 
-
-$\chi$^2^(`r q1_tidy$parameter`) = `r round(q1_tidy$statistic,2)`, *p* = `r round(q1_tidy$p.value,3)`  
+Political alignment and self-identification as an environmentalist are not independent (there is a significant association between political alignment and response to the env_id question of the survey) :  $\chi$^2^(`r q1_tidy$parameter`) = `r round(q1_tidy$statistic,2)`, *p* = `r round(q1_tidy$p.value,3)`  
   
+  The majority of conservatives do not identify as environmentalists and the majority of liberals do identify as environmentalists. 
   
 ---
   
